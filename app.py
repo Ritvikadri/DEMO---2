@@ -12,8 +12,16 @@ import streamlit as st
 st.set_page_config(page_title="HabitFlow — your month, in motion", page_icon="✳️", layout="wide", initial_sidebar_state="expanded")
 
 DATA_PATH = Path(__file__).parent / "data.json"
-with DATA_PATH.open(encoding="utf-8") as fp:
-    SEED = json.load(fp)
+if DATA_PATH.exists():
+    with DATA_PATH.open(encoding="utf-8") as fp:
+        SEED = json.load(fp)
+else:
+    # Keep the app deployable even if the seed JSON was omitted from the repo.
+    SEED = {
+        'source': 'Habit Tracker Dark', 'sheet': 'HABIT TRACKER I',
+        'year': date.today().year, 'month': date.today().strftime('%B'),
+        'habits': [], 'mock_data': [],
+    }
 
 st.markdown("""
 <style>
